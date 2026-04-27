@@ -761,8 +761,40 @@
 
   @media (max-width: 768px) {
     nav .nav-links { display: none; }
-    .hero-nav { flex-direction: column; }
     .section { padding: 60px 20px; }
+
+    /* Compact mobile nav */
+    nav {
+      padding: 10px 16px;
+      background: rgba(28,43,58,0.95);
+    }
+    nav .logo {
+      font-size: 1rem;
+    }
+
+    /* Hero nav as horizontal scroll */
+    .hero-nav {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 8px;
+      padding: 4px 20px;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .hero-nav::-webkit-scrollbar {
+      display: none;
+    }
+    .hero-nav a {
+      flex-shrink: 0;
+      font-size: 9px;
+      padding: 6px 12px;
+      white-space: nowrap;
+    }
+    .scroll-hint {
+      display: none;
+    }
   }
 </style>
 </head>
