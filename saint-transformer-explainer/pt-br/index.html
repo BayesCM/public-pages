@@ -1153,39 +1153,59 @@
     </div>
 
     <div class="viz-card teal reveal" style="margin-top: 32px;">
-      <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; color: var(--slate); margin-bottom: 20px;">Estrutura do Loop de Treinamento</h3>
-      <div class="flow-diagram">
-        <div class="flow-step">
-          <div class="flow-box">Dados</div>
+      <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; color: var(--slate); margin-bottom: 20px;">Estrutura do Treinamento</h3>
+
+      <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);">
+        <div style="font-family: 'DM Mono', monospace; font-size: 10px; color: var(--teal); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Definição</div>
+        <div style="font-size: 0.95rem; color: var(--ink);">
+          <strong>Epoch</strong> = Uma passagem completa pelos dados de treino (chunks embaralhados em ordem aleatória)
         </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-box">Chunks<br><span style="font-size:9px;">3 meses</span></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <!-- Task 1 -->
+        <div>
+          <div style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--teal); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Tarefa 1: Reconstrução Masc. (10 epochs)</div>
+          <div class="flow-diagram" style="transform: scale(0.85); transform-origin: top left;">
+            <div class="flow-step"><div class="flow-box">Dados</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box">3meses<br><span style="font-size:9px;">chunks</span></div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box">Shuffle</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box">Batch<br><span style="font-size:9px;">128</span></div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box blue">Mask<br><span style="font-size:9px;">20%</span></div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box">Forward</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box teal">Backward</div></div>
+          </div>
         </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-box">Shuffle</div>
+
+        <!-- Task 2 -->
+        <div>
+          <div style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--violet); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Tarefa 2: Predição Temporal (10 epochs)</div>
+          <div class="flow-diagram" style="transform: scale(0.85); transform-origin: top left;">
+            <div class="flow-step"><div class="flow-box">Pares<br><span style="font-size:9px;">t, t+1</span></div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box">3meses<br><span style="font-size:9px;">chunks</span></div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box">Shuffle</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box">Batch<br><span style="font-size:9px;">128</span></div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box violet">Sem mask</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box">Forward</div></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><div class="flow-box violet">Backward</div></div>
+          </div>
         </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-box">Batch<br><span style="font-size:9px;">128</span></div>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-box">Mask<br><span style="font-size:9px;">20%</span></div>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-box">Forward</div>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-box">Loss</div>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">
-          <div class="flow-box teal">Backward</div>
-        </div>
+      </div>
+
+      <div style="margin-top: 20px; padding: 12px; background: rgba(26,138,111,0.08); border-radius: 4px; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted);">
+        Tarefas treinadas sequencialmente: Tarefa 1 completa todos os 10 epochs, depois Tarefa 2 roda por 10 epochs
       </div>
     </div>
   </div>
