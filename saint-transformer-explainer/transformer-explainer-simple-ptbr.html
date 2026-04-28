@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como a IA Prevê Retornos de Ações — Um Guia Simples</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --warm-white: #fdfcf9;
+    --forest: #2d5a3d;
+    --sage: #6b8c7a;
+    --terracotta: #c17f59;
+    --gold: #d4a853;
+    --ink: #1a1a1a;
+    --muted: #7a7a7a;
+    --border: #e8e0d5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Crimson Pro', serif;
+    font-size: 18px;
+    line-height: 1.7;
+    background: var(--cream);
+    color: var(--ink);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    background: linear-gradient(180deg, var(--forest) 0%, var(--sage) 100%);
+    color: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .hero-overline {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: 1.1;
+    max-width: 900px;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    max-width: 600px;
+    opacity: 0.9;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-nav {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-nav a {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cream);
+    text-decoration: none;
+    padding: 10px 18px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 24px;
+    transition: all 0.3s ease;
+  }
+
+  .hero-nav a:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.5);
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 100px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--forest);
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+
+  .section-text {
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+
+  .section-text strong {
+    color: var(--terracotta);
+    font-weight: 600;
+  }
+
+  /* ── METAPHOR CARDS ── */
+  .metaphor-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 32px 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  }
+
+  .metaphor-icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+  }
+
+  .metaphor-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--forest);
+    margin-bottom: 12px;
+  }
+
+  .metaphor-text {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  /* ── SIMPLE DIAGRAMS ── */
+  .concept-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .concept-step {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: var(--warm-white);
+    border-radius: 8px;
+    border-left: 4px solid var(--sage);
+  }
+
+  .concept-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--sage);
+    min-width: 32px;
+  }
+
+  .concept-text {
+    font-size: 1.05rem;
+  }
+
+  /* ── STORY BOXES ── */
+  .story-box {
+    background: linear-gradient(135deg, var(--forest) 0%, var(--sage) 100%);
+    color: var(--cream);
+    padding: 40px;
+    border-radius: 12px;
+    margin: 40px 0;
+  }
+
+  .story-box h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+    color: var(--gold);
+  }
+
+  .story-box p {
+    opacity: 0.95;
+  }
+
+  /* ── SIMPLIFIED VISUALS ── */
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .pattern-cell {
+    aspect-ratio: 1;
+    background: var(--sage);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: white;
+    font-family: 'DM Mono', monospace;
+    transition: transform 0.3s ease;
+  }
+
+  .pattern-cell:hover {
+    transform: scale(1.1);
+    background: var(--forest);
+  }
+
+  .pattern-cell.highlight {
+    background: var(--terracotta);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .reveal {
+    opacity: 0;
+    animation: fadeInUp 0.7s ease forwards;
+  }
+
+  .reveal-delay-1 { animation-delay: 0.2s; }
+  .reveal-delay-2 { animation-delay: 0.4s; }
+  .reveal-delay-3 { animation-delay: 0.6s; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .section { padding: 60px 20px; }
+    .hero-nav { flex-direction: row; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding: 0 20px; }
+    .pattern-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    background: var(--forest);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ═════════════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-overline">Entendendo IA nas Finanças</div>
+  <h1>Como a <em>Inteligência Artificial</em><br>Prevê o Mercado de Ações</h1>
+  <p class="hero-subtitle">Um guia simples para entender como computadores aprendem a identificar padrões em dados financeiros e ajudam a tomar decisões de investimento.</p>
+  <nav class="hero-nav">
+    <a href="#problem">O Problema</a>
+    <a href="#clues">Coletando Pistas</a>
+    <a href="#patterns">Encontrando Padrões</a>
+    <a href="#learning">Aprendendo</a>
+    <a href="#decisions">Tomando Decisões</a>
+  </nav>
+</section>
+
+<!-- ══ O PROBLEMA ════════════════════════════════════════════════════════════════════ -->
+<section class="section" id="problem">
+  <div class="section-num">01 / 05</div>
+  <h2 class="section-title reveal">O Que Estamos Tentando Resolver?</h2>
+
+  <p class="section-text reveal">
+    Imagine que você precisa prever quais ações vão subir no próximo mês. Existem <strong>milhares de empresas</strong> e incontáveis fatores que podem afetar seus preços — lucros, tendências econômicas, notícias, movimentos de concorrentes, e muito mais.
+  </p>
+
+  <p class="section-text reveal">
+    Analistas tradicionais podem estudar algumas dezenas de empresas e acompanhar alguns indicadores. Mas e se pudéssemos analisar <strong>todas as empresas negociadas em bolsa</strong> e considerar <strong>centenas de sinais</strong> de uma vez? É aqui que a inteligência artificial entra.
+  </p>
+
+  <div class="story-box reveal">
+    <h3>O Desafio em Termos Simples</h3>
+    <p>
+      Pense como prever o clima de amanhã. Você olha para temperatura, umidade, padrões de vento, sistemas de pressão e mais. Alguns fatores importam mais que outros, e eles interagem de formas complexas. Nossa IA faz algo similar para ações — ela olha para muitos sinais e aprende como eles se combinam para prever retornos futuros.
+    </p>
+  </div>
+
+  <div class="metaphor-card reveal">
+    <div class="metaphor-icon">🎯</div>
+    <div class="metaphor-title">Nosso Objetivo</div>
+    <div class="metaphor-text">
+      Prever quais ações provavelmente terão retornos maiores no próximo mês, usando padrões aprendidos com décadas de dados históricos.
+    </div>
+  </div>
+</section>
+
+<!-- ══ COLETANDO PISTAS ════════════════════════════════════════════════════════════════ -->
+<section class="section" id="clues">
+  <div class="section-num">02 / 05</div>
+  <h2 class="section-title reveal">Coletando Pistas Sobre Cada Empresa</h2>
+
+  <p class="section-text reveal">
+    Assim como um detetive coleta evidências para resolver um caso, nossa IA coleta <strong>pistas financeiras</strong> sobre cada empresa. Não são palpites aleatórios — são métricas bem estabelecidas que investidores usam há décadas.
+  </p>
+
+  <p class="section-text reveal">
+    Organizamos essas pistas em categorias:
+  </p>
+
+  <div class="concept-diagram reveal">
+    <div class="concept-step">
+      <div class="concept-num">1</div>
+      <div class="concept-text"><strong>Valor:</strong> A ação está cara ou barata em relação aos lucros e ativos?</div>
+    </div>
+    <div class="concept-step">
+      <div class="concept-num">2</div>
+      <div class="concept-text"><strong>Crescimento:</strong> A empresa está crescendo vendas e lucros rapidamente?</div>
+    </div>
+    <div class="concept-step">
+      <div class="concept-num">3</div>
+      <div class="concept-text"><strong>Qualidade:</strong> A empresa é lucrativa e bem administrada?</div>
+    </div>
+    <div class="concept-step">
+      <div class="concept-num">4</div>
+      <div class="concept-text"><strong>Momentum:</strong> O preço da ação está tendendo a subir ou cair recentemente?</div>
+    </div>
+    <div class="concept-step">
+      <div class="concept-num">5</div>
+      <div class="concept-text"><strong>Segurança:</strong> Quão volátil ou arriscada é a ação?</div>
+    </div>
+  </div>
+
+  <div class="story-box reveal">
+    <h3>Pense Como um Checkup Médico</h3>
+    <p>
+      Quando você vai ao médico, ele mede várias coisas: frequência cardíaca, pressão arterial, colesterol, temperatura. Cada medição diz algo diferente sobre sua saúde. Da mesma forma, cada pista financeira diz algo diferente sobre o potencial de investimento de uma empresa.
+    </p>
+  </div>
+
+  <p class="section-text reveal">
+    Para uma única empresa em um único mês, podemos olhar para <strong>200+ pistas diferentes</strong>. Isso é muita informação para processar!
+  </p>
+</section>
+
+<!-- ══ ENCONTRANDO PADRÕES ══════════════════════════════════════════════════════════════ -->
+<section class="section" id="patterns">
+  <div class="section-num">03 / 05</div>
+  <h2 class="section-title reveal">Como a IA Conecta os Pontos</h2>
+
+  <p class="section-text reveal">
+    Aqui acontece a mágica. A IA não olha para cada pista isoladamente — ela descobre <strong>como diferentes pistas se relacionam entre si</strong>.
+  </p>
+
+  <p class="section-text reveal">
+    Isso é chamado de <strong>"attention"</strong> em IA, mas você pode pensar como <strong>"conectar os pontos"</strong>. A IA aprende coisas como:
+  </p>
+
+  <div class="metaphor-card reveal">
+    <div class="metaphor-icon">🔍</div>
+    <div class="metaphor-title">Padrões que a IA Pode Descobrir</div>
+    <div class="metaphor-text">
+      "Quando uma empresa tem momentum forte E rentabilidade boa, mas a ação ainda está barata, esse é um sinal poderoso para retornos futuros."
+    </div>
+  </div>
+
+  <div class="concept-diagram reveal">
+    <div class="concept-step">
+      <div class="concept-num">→</div>
+      <div class="concept-text">Ela aprende que certas combinações de pistas importam mais que outras</div>
+    </div>
+    <div class="concept-step">
+      <div class="concept-num">→</div>
+      <div class="concept-text">Ela percebe que algumas pistas só importam em situações específicas</div>
+    </div>
+    <div class="concept-step">
+      <div class="concept-num">→</div>
+      <div class="concept-text">Ela descobre padrões sutis que humanos podem perder</div>
+    </div>
+  </div>
+
+  <div class="story-box reveal">
+    <h3>Como um Detetive Experiente</h3>
+    <p>
+      Um detetive novato pode ver cada peça de evidência separadamente. Um detetive experiente sabe como as peças se encaixam — uma impressão digital perto da janela, pegadas de lama e uma fechadura quebrada contam uma história quando combinadas. Nossa IA aprende a ver essas combinações em centenas de empresas ao mesmo tempo.
+    </p>
+  </div>
+
+  <p class="section-text reveal">
+    O insight principal: <strong>relacionamentos importam</strong>. Um índice preço/lucro baixo pode ser bom ou ruim dependendo do que mais está acontecendo com a empresa. A IA descobre isso estudando milhares de exemplos.
+  </p>
+</section>
+
+<!-- ══ APRENDENDO COM A HISTÓRIA ══════════════════════════════════════════════════════ -->
+<section class="section" id="learning">
+  <div class="section-num">04 / 05</div>
+  <h2 class="section-title reveal">Aprendendo com Décadas de Dados</h2>
+
+  <p class="section-text reveal">
+    Como a IA aprende esses padrões? Estudando história — muita história. Nós fornecemos dados de <strong>mais de 20 anos</strong> de história do mercado de ações e pedimos para encontrar o que funciona.
+  </p>
+
+  <p class="section-text reveal">
+    O processo de aprendizado acontece em dois estágios:
+  </p>
+
+  <div class="metaphor-card reveal">
+    <div class="metaphor-icon">📚</div>
+    <div class="metaphor-title">Estágio 1: Aprendendo o Básico</div>
+    <div class="metaphor-text">
+      Imagine mostrar flashcards para um estudante com algumas informações escondidas. Ele precisa adivinhar o que está faltando. Fazendo isso milhares de vezes, ele aprende como diferentes peças de informação se relacionam. Nossa IA faz algo similar — ela aprende a "língua" dos dados financeiros.
+    </div>
+  </div>
+
+  <div class="metaphor-card reveal">
+    <div class="metaphor-icon">🔮</div>
+    <div class="metaphor-title">Estágio 2: Aprendendo a Prever</div>
+    <div class="metaphor-text">
+      Depois que a IA entende os padrões financeiros, nós a ensinamos a olhar para os dados de hoje e prever o que acontece no próximo mês. Ela pratica em dados históricos onde já sabemos a resposta, aprendendo com seus erros.
+    </div>
+  </div>
+
+  <p class="section-text reveal">
+    Isso não é "decorar" desempenhos passados de ações. A IA aprende <strong>princípios gerais</strong> que se aplicam a novas situações — assim como um médico aprende princípios médicos que ajudam a tratar novos pacientes, não apenas decorar casos passados.
+  </p>
+
+  <div class="story-box reveal">
+    <h3>O Modelo de Aprendizagem</h3>
+    <p>
+      Pense como um aprendizado. Um chef júnior observa cozinheiros experientes, tenta receitas, comete erros e gradualmente aprende o que funciona. Nossa IA passa por um processo similar — ela "estuda" dados históricos, faz previsões, recebe feedback e melhora. Depois de estudar milhões de exemplos, ela fica bastante habilidosa.
+    </p>
+  </div>
+</section>
+
+<!-- ══ TOMANDO DECISÕES DE INVESTIMENTO ════════════════════════════════════════════════ -->
+<section class="section" id="decisions">
+  <div class="section-num">05 / 05</div>
+  <h2 class="section-title reveal">Transformando Previsões em Carteiras</h2>
+
+  <p class="section-text reveal">
+    Depois que a IA aprendeu a prever quais ações podem ter bom desempenho, como usamos isso para construir uma carteira de investimento?
+  </p>
+
+  <div class="concept-diagram reveal">
+    <div class="concept-step">
+      <div class="concept-num">1</div>
+      <div class="concept-text"><strong>Prever:</strong> A IA estima retornos esperados para milhares de empresas</div>
+    </div>
+    <div class="concept-step">
+      <div class="concept-num">2</div>
+      <div class="concept-text"><strong>Selecionar:</strong> Escolhemos ações com maiores retornos previstos (para compra) e menores (para venda)</div>
+    </div>
+    <div class="concept-step">
+      <div class="concept-num">3</div>
+      <div class="concept-text"><strong>Equilibrar:</strong> Construímos uma carteira com a mistura certa de posições</div>
+    </div>
+    <div class="concept-step">
+      <div class="concept-num">4</div>
+      <div class="concept-text"><strong>Gerenciar Risco:</strong> Limitamos quanto investimos em qualquer ação ou setor</div>
+    </div>
+  </div>
+
+  <div class="story-box reveal">
+    <h3>O Resultado: Uma Carteira Diversificada</h3>
+    <p>
+      A carteira final pode ter 60+ posições — algumas estamos apostando que vão subir (posições compradas) e algumas estamos apostando que vão cair (posições vendidas). Esta diversificação ajuda a gerenciar risco enquanto busca capturar os padrões que a IA descobriu.
+    </p>
+  </div>
+
+  <div class="pattern-grid reveal">
+    <div class="pattern-cell">PETR4</div>
+    <div class="pattern-cell">VALE3</div>
+    <div class="pattern-cell">ITUB4</div>
+    <div class="pattern-cell">BBDC4</div>
+    <div class="pattern-cell">WEGE3</div>
+    <div class="pattern-cell highlight">MGLU3</div>
+    <div class="pattern-cell">RENT3</div>
+    <div class="pattern-cell">HAPV3</div>
+    <div class="pattern-cell">PRIO3</div>
+    <div class="pattern-cell">BPAC11</div>
+    <div class="pattern-cell">ABEV3</div>
+    <div class="pattern-cell">SUZB3</div>
+  </div>
+
+  <p class="section-text reveal" style="text-align: center; font-style: italic; color: var(--muted); margin-top: 24px;">
+    E muitas mais — todas selecionadas com base em padrões aprendidos com dados históricos
+  </p>
+
+  <div class="metaphor-card reveal">
+    <div class="metaphor-icon">⚖️</div>
+    <div class="metaphor-title">Equilibrando Risco e Retorno</div>
+    <div class="metaphor-text">
+      A IA nos ajuda a identificar oportunidades, mas ainda aplicamos julgamento humano e controles de risco. Não deixamos a IA tomar posições extremas — equilibramos seus insights com gestão de risco prudente.
+    </div>
+  </div>
+
+  <div class="story-box reveal" style="background: linear-gradient(135deg, var(--terracotta) 0%, var(--gold) 100%);">
+    <h3>Importante Lembrar</h3>
+    <p>
+      Nenhuma IA — não importa quão sofisticada — pode prever perfeitamente o futuro. Mercados são imprevisíveis e influenciados por incontáveis fatores. Nossa IA é uma ferramenta que nos ajuda a tomar decisões mais informadas, não uma bola de cristal. É uma parte de um processo de investimento mais amplo que inclui supervisão humana, gestão de risco e melhoria contínua.
+    </p>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  Como a IA Prevê Retornos de Ações · Um Guia Simples<br>
+  <span style="opacity: 0.7; margin-top: 12px; display: block;">© Bayes Capital Management · Para Fins Educativos</span>
+</footer>
+
+<script>
+// Simple reveal on scroll
+const revealElements = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+    }
+  });
+}, { threshold: 0.1 });
+
+revealElements.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
