@@ -3,19 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How AI Predicts Stock Returns — A Simple Guide</title>
-<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Understanding SAINT — A Visual Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=DM+Serif+Display&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #faf7f2;
-    --warm-white: #fdfcf9;
-    --forest: #2d5a3d;
-    --sage: #6b8c7a;
-    --terracotta: #c17f59;
-    --gold: #d4a853;
+    --navy: #1a2744;
+    --navy-light: #2d3e5f;
+    --navy-pale: #e8ecf0;
+    --blue: #3b5998;
+    --blue-light: #6b8cae;
+    --gold: #b8972e;
+    --cream: #f5f3ef;
     --ink: #1a1a1a;
-    --muted: #7a7a7a;
-    --border: #e8e0d5;
+    --muted: #6a6a6a;
+    --border: #d4d4d4;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,8 +24,8 @@
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'Crimson Pro', serif;
-    font-size: 18px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 17px;
     line-height: 1.7;
     background: var(--cream);
     color: var(--ink);
@@ -32,528 +33,664 @@
 
   /* ── HERO ── */
   .hero {
-    min-height: 90vh;
+    min-height: 85vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 60px 24px;
-    background: linear-gradient(180deg, var(--forest) 0%, var(--sage) 100%);
+    background: var(--navy);
     color: var(--cream);
     position: relative;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
   .hero-overline {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.2em;
+    font-size: 10px;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 24px;
-    position: relative;
-    z-index: 1;
   }
 
   .hero h1 {
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(2.5rem, 7vw, 5rem);
-    line-height: 1.1;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    line-height: 1.15;
     max-width: 900px;
-    margin-bottom: 24px;
-    position: relative;
-    z-index: 1;
+    margin-bottom: 20px;
   }
 
   .hero h1 em {
     font-style: italic;
-    color: var(--gold);
+    color: var(--blue-light);
   }
 
   .hero-subtitle {
-    font-size: 1.2rem;
-    max-width: 600px;
-    opacity: 0.9;
-    position: relative;
-    z-index: 1;
+    font-size: 1.05rem;
+    max-width: 580px;
+    opacity: 0.85;
+    line-height: 1.6;
   }
 
   .hero-nav {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 48px;
-    position: relative;
-    z-index: 1;
+    margin-top: 40px;
   }
 
   .hero-nav a {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
     color: var(--cream);
     text-decoration: none;
-    padding: 10px 18px;
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 24px;
-    transition: all 0.3s ease;
+    padding: 10px 16px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 3px;
+    transition: all 0.25s ease;
   }
 
   .hero-nav a:hover {
-    background: rgba(255,255,255,0.15);
-    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.4);
   }
 
   /* ── SECTIONS ── */
   .section {
-    padding: 100px 24px;
-    max-width: 800px;
+    padding: 80px 24px;
+    max-width: 780px;
     margin: 0 auto;
   }
 
   .section-num {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     color: var(--gold);
-    letter-spacing: 0.15em;
-    margin-bottom: 16px;
+    letter-spacing: 0.2em;
+    margin-bottom: 12px;
   }
 
   .section-title {
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(2rem, 5vw, 3rem);
-    color: var(--forest);
-    line-height: 1.2;
-    margin-bottom: 24px;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    color: var(--navy);
+    line-height: 1.25;
+    margin-bottom: 20px;
   }
 
   .section-text {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: var(--ink);
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 
   .section-text strong {
-    color: var(--terracotta);
+    color: var(--navy);
     font-weight: 600;
   }
 
-  /* ── METAPHOR CARDS ── */
-  .metaphor-card {
-    background: var(--warm-white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 32px;
-    margin: 32px 0;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  .section-text em {
+    font-style: italic;
+    color: var(--blue);
   }
 
-  .metaphor-icon {
-    font-size: 2.5rem;
-    margin-bottom: 16px;
+  /* ── EXPLANATION BOXES ── */
+  .explain-box {
+    background: var(--navy-pale);
+    border-left: 3px solid var(--navy);
+    padding: 24px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
   }
 
-  .metaphor-title {
+  .explain-box-title {
     font-family: 'DM Serif Display', serif;
-    font-size: 1.4rem;
-    color: var(--forest);
-    margin-bottom: 12px;
+    font-size: 1.1rem;
+    color: var(--navy);
+    margin-bottom: 10px;
   }
 
-  .metaphor-text {
+  .explain-box-text {
+    font-size: 0.95rem;
     color: var(--muted);
-    font-size: 1rem;
+    line-height: 1.6;
   }
 
-  /* ── SIMPLE DIAGRAMS ── */
-  .concept-diagram {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin: 32px 0;
-  }
-
-  .concept-step {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 20px;
-    background: var(--warm-white);
-    border-radius: 8px;
-    border-left: 4px solid var(--sage);
-  }
-
-  .concept-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 14px;
-    color: var(--sage);
-    min-width: 32px;
-  }
-
-  .concept-text {
-    font-size: 1.05rem;
-  }
-
-  /* ── STORY BOXES ── */
-  .story-box {
-    background: linear-gradient(135deg, var(--forest) 0%, var(--sage) 100%);
-    color: var(--cream);
-    padding: 40px;
-    border-radius: 12px;
-    margin: 40px 0;
-  }
-
-  .story-box h3 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.6rem;
-    margin-bottom: 16px;
-    color: var(--gold);
-  }
-
-  .story-box p {
-    opacity: 0.95;
-  }
-
-  /* ── SIMPLIFIED VISUALS ── */
-  .pattern-grid {
+  /* ── KEY CONCEPT CARDS ── */
+  .concept-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
     margin: 24px 0;
   }
 
-  .pattern-cell {
-    aspect-ratio: 1;
-    background: var(--sage);
-    border-radius: 6px;
+  .concept-card {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 4px;
+    transition: border-color 0.25s ease;
+  }
+
+  .concept-card:hover {
+    border-color: var(--blue);
+  }
+
+  .concept-card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .concept-card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .concept-card-text {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── PROCESS FLOW ── */
+  .process-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 32px 0;
+  }
+
+  .process-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .process-step:not(:last-child) {
+    margin-bottom: 16px;
+  }
+
+  .process-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--navy);
+    font-weight: 600;
+    min-width: 28px;
+  }
+
+  .process-content h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .process-content p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── VISUAL DIAGRAMS ── */
+  .diagram-container {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin: 32px 0;
+    border-radius: 4px;
+  }
+
+  .diagram-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .diagram-visual {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .diagram-box {
+    padding: 16px 20px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .diagram-box.input {
+    background: var(--navy-pale);
+    color: var(--navy);
+  }
+
+  .diagram-box.process {
+    background: var(--navy);
+    color: var(--cream);
+  }
+
+  .diagram-box.output {
+    background: var(--blue);
+    color: white;
+  }
+
+  .diagram-arrow {
+    color: var(--muted);
+    font-size: 1.2rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    color: white;
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+  }
+
+  .comparison-table th {
     font-family: 'DM Mono', monospace;
-    transition: transform 0.3s ease;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: left;
+    padding: 12px 16px;
+    background: var(--navy);
+    color: var(--cream);
   }
 
-  .pattern-cell:hover {
-    transform: scale(1.1);
-    background: var(--forest);
+  .comparison-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
   }
 
-  .pattern-cell.highlight {
-    background: var(--terracotta);
+  .comparison-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .comparison-table td:first-child {
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight-box {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 28px;
+    margin: 32px 0;
+    border-radius: 4px;
+  }
+
+  .highlight-box h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .highlight-box p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    line-height: 1.6;
   }
 
   /* ── ANIMATIONS ── */
   @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .reveal {
     opacity: 0;
-    animation: fadeInUp 0.7s ease forwards;
+    animation: fadeInUp 0.6s ease forwards;
   }
 
-  .reveal-delay-1 { animation-delay: 0.2s; }
-  .reveal-delay-2 { animation-delay: 0.4s; }
-  .reveal-delay-3 { animation-delay: 0.6s; }
+  .reveal-delay-1 { animation-delay: 0.15s; }
+  .reveal-delay-2 { animation-delay: 0.3s; }
+  .reveal-delay-3 { animation-delay: 0.45s; }
 
   /* ── MOBILE ── */
   @media (max-width: 768px) {
     .section { padding: 60px 20px; }
-    .hero-nav { flex-direction: row; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding: 0 20px; }
-    .pattern-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .hero-nav { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding: 0 20px; }
+    .diagram-visual { flex-direction: column; }
+    .diagram-arrow { transform: rotate(90deg); }
   }
 
   /* ── FOOTER ── */
   .footer {
     text-align: center;
-    padding: 40px 24px;
-    background: var(--forest);
+    padding: 32px 24px;
+    background: var(--navy);
     color: var(--cream);
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.1em;
   }
 </style>
 </head>
 <body>
 
-<!-- ══ HERO ═════════════════════════════════════════════════════════════════════════ -->
+<!-- ══ HERO ═══════════════════════════════════════════════════════════════════════════ -->
 <section class="hero">
-  <div class="hero-overline">Understanding AI in Finance</div>
-  <h1>How <em>Artificial Intelligence</em><br>Predicts Stock Markets</h1>
-  <p class="hero-subtitle">A simple guide to understanding how computers learn to spot patterns in financial data and help make investment decisions.</p>
+  <div class="hero-overline">SAINT Architecture</div>
+  <h1>Understanding <em>Self-Attention</em><br>for Financial Data</h1>
+  <p class="hero-subtitle">How the SAINT model learns patterns from financial indicators to predict stock returns — explained without the math.</p>
   <nav class="hero-nav">
-    <a href="#problem">The Problem</a>
-    <a href="#clues">Gathering Clues</a>
-    <a href="#patterns">Finding Patterns</a>
-    <a href="#learning">Learning</a>
-    <a href="#decisions">Making Decisions</a>
+    <a href="#overview">Overview</a>
+    <a href="#features">Features</a>
+    <a href="#attention">Attention</a>
+    <a href="#training">Training</a>
+    <a href="#prediction">Prediction</a>
   </nav>
 </section>
 
-<!-- ══ THE PROBLEM ═══════════════════════════════════════════════════════════════════ -->
-<section class="section" id="problem">
+<!-- ══ OVERVIEW ═════════════════════════════════════════════════════════════════════════ -->
+<section class="section" id="overview">
   <div class="section-num">01 / 05</div>
-  <h2 class="section-title reveal">What Are We Trying to Solve?</h2>
+  <h2 class="section-title reveal">What is SAINT?</h2>
 
   <p class="section-text reveal">
-    Imagine you're trying to predict which stocks will go up next month. There are <strong>thousands of companies</strong> and countless factors that could affect their prices — earnings, economic trends, news, competitor moves, and more.
+    SAINT stands for <em>Self-Attention Supervised Tabular Transformers</em>. It's a neural network architecture designed specifically for <strong>tabular data</strong> — data organized in tables, like spreadsheets.
   </p>
 
   <p class="section-text reveal">
-    Traditional analysts might study a few dozen companies and track a handful of metrics. But what if we could analyze <strong>every publicly traded company</strong> and consider <strong>hundreds of signals</strong> at once? That's where artificial intelligence comes in.
+    In finance, we work with tabular data all the time: companies in rows, financial metrics in columns. SAINT is particularly good at this because it can <strong>learn relationships between different metrics</strong> — not just look at each one in isolation.
   </p>
 
-  <div class="story-box reveal">
-    <h3>The Challenge in Simple Terms</h3>
-    <p>
-      Think of it like trying to predict tomorrow's weather. You look at temperature, humidity, wind patterns, pressure systems, and more. Some factors matter more than others, and they interact in complex ways. Our AI does something similar for stocks — it looks at many signals and learns how they combine to predict future returns.
-    </p>
+  <div class="explain-box reveal">
+    <div class="explain-box-title">Why "Self-Attention"?</div>
+    <div class="explain-box-text">
+      Self-attention means the model can "pay attention" to different parts of its input simultaneously. For a company with 100+ financial metrics, the model learns which metrics matter most for prediction, and how they interact with each other.
+    </div>
   </div>
 
-  <div class="metaphor-card reveal">
-    <div class="metaphor-icon">🎯</div>
-    <div class="metaphor-title">Our Goal</div>
-    <div class="metaphor-text">
-      Predict which stocks are likely to have higher returns in the next month, using patterns learned from decades of historical data.
-    </div>
+  <div class="highlight-box reveal">
+    <h3>The Key Insight</h3>
+    <p>
+      Traditional models might treat "price-to-earnings ratio" as a standalone signal. SAINT learns that "P/E ratio" means something different when "momentum" is high versus when it's low. It captures these contextual relationships automatically.
+    </p>
   </div>
 </section>
 
-<!-- ══ GATHERING CLUES ═════════════════════════════════════════════════════════════════ -->
-<section class="section" id="clues">
+<!-- ══ FEATURES ══════════════════════════════════════════════════════════════════════════ -->
+<section class="section" id="features">
   <div class="section-num">02 / 05</div>
-  <h2 class="section-title reveal">Gathering Clues About Each Company</h2>
+  <h2 class="section-title reveal">Organizing Financial Information</h2>
 
   <p class="section-text reveal">
-    Just like a detective collects evidence to solve a case, our AI collects <strong>financial clues</strong> about each company. These aren't random guesses — they're well-established measures that investors have used for decades.
+    Before SAINT can learn anything, we need to organize our data. Each row represents one company at one point in time. Each column is a financial metric — what we call <strong>features</strong>.
   </p>
 
-  <p class="section-text reveal">
-    We organize these clues into categories:
-  </p>
-
-  <div class="concept-diagram reveal">
-    <div class="concept-step">
-      <div class="concept-num">1</div>
-      <div class="concept-text"><strong>Value:</strong> Is the stock expensive or cheap compared to its earnings and assets?</div>
+  <div class="concept-grid reveal">
+    <div class="concept-card">
+      <div class="concept-card-icon">📊</div>
+      <div class="concept-card-title">Value Metrics</div>
+      <div class="concept-card-text">P/E ratio, price-to-book, dividend yield — is the stock cheap or expensive?</div>
     </div>
-    <div class="concept-step">
-      <div class="concept-num">2</div>
-      <div class="concept-text"><strong>Growth:</strong> Is the company growing its sales and profits quickly?</div>
+    <div class="concept-card">
+      <div class="concept-card-icon">📈</div>
+      <div class="concept-card-title">Growth Metrics</div>
+      <div class="concept-card-text">Revenue growth, earnings growth — is the company expanding?</div>
     </div>
-    <div class="concept-step">
-      <div class="concept-num">3</div>
-      <div class="concept-text"><strong>Quality:</strong> Is the company profitable and well-managed?</div>
+    <div class="concept-card">
+      <div class="concept-card-icon">⭐</div>
+      <div class="concept-card-title">Quality Metrics</div>
+      <div class="concept-card-text">Profitability, return on equity — is the company well-run?</div>
     </div>
-    <div class="concept-step">
-      <div class="concept-num">4</div>
-      <div class="concept-text"><strong>Momentum:</strong> Is the stock price trending up or down recently?</div>
-    </div>
-    <div class="concept-step">
-      <div class="concept-num">5</div>
-      <div class="concept-text"><strong>Safety:</strong> How volatile or risky is the stock?</div>
+    <div class="concept-card">
+      <div class="concept-card-icon">🚀</div>
+      <div class="concept-card-title">Momentum Metrics</div>
+      <div class="concept-card-text">Price momentum, volatility — how is the stock moving?</div>
     </div>
   </div>
 
-  <div class="story-box reveal">
-    <h3>Think of It Like a Medical Checkup</h3>
-    <p>
-      When you go to a doctor, they measure many things: heart rate, blood pressure, cholesterol, temperature. Each measurement tells you something different about your health. Similarly, each financial clue tells us something different about a company's investment potential.
-    </p>
+  <div class="diagram-container reveal">
+    <div class="diagram-title">How Features Become "Tokens"</div>
+    <div class="diagram-visual">
+      <div class="diagram-box input">P/E: 15.2</div>
+      <div class="diagram-box input">ROE: 18%</div>
+      <div class="diagram-box input">Mom: +5%</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box process">Tokenization</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box output">256-dim vector</div>
+    </div>
   </div>
 
   <p class="section-text reveal">
-    For a single company in a single month, we might look at <strong>200+ different clues</strong>. That's a lot of information to process!
+    Each feature gets converted into a <strong>numeric representation</strong> — a list of 256 numbers. This is called an <strong>embedding</strong>. Think of it as translating the raw number "15.2" into a richer description that captures its meaning.
   </p>
+
+  <div class="explain-box reveal">
+    <div class="explain-box-title">What's an Embedding?</div>
+    <div class="explain-box-text">
+      An embedding is a way of representing information as numbers. Instead of just storing "P/E = 15.2", we store 256 numbers that encode what "15.2" means in context — is it high or low? What range is typical? What does it predict? The model learns these representations automatically.
+    </div>
+  </div>
 </section>
 
-<!-- ══ FINDING PATTERNS ═════════════════════════════════════════════════════════════════ -->
-<section class="section" id="patterns">
+<!-- ══ ATTENTION ═════════════════════════════════════════════════════════════════════════ -->
+<section class="section" id="attention">
   <div class="section-num">03 / 05</div>
-  <h2 class="section-title reveal">How the AI Connects the Dots</h2>
+  <h2 class="section-title reveal">How SAINT Learns Relationships</h2>
 
   <p class="section-text reveal">
-    Here's where the magic happens. The AI doesn't just look at each clue in isolation — it figures out <strong>how different clues relate to each other</strong>.
+    This is the core of the SAINT architecture. After converting features into embeddings, the model runs them through <strong>6 layers of self-attention</strong>.
   </p>
 
   <p class="section-text reveal">
-    This is called <strong>"attention"</strong> in AI, but you can think of it as <strong>"connecting the dots"</strong>. The AI learns things like:
+    Each layer does something simple but powerful: it lets every feature "ask questions" of every other feature. "Price-to-earnings" might ask "momentum": "Does my value mean something different when stocks are rising fast?"
   </p>
 
-  <div class="metaphor-card reveal">
-    <div class="metaphor-icon">🔍</div>
-    <div class="metaphor-title">Patterns the AI Might Discover</div>
-    <div class="metaphor-text">
-      "When a company has strong momentum AND good profitability, but the stock is still cheap, that's a powerful signal for future returns."
+  <div class="process-flow reveal">
+    <div class="process-step">
+      <div class="process-num">1</div>
+      <div class="process-content">
+        <h4>Feature Embeddings Enter</h4>
+        <p>Each feature (P/E, momentum, etc.) is now a 256-dimensional vector</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">2</div>
+      <div class="process-content">
+        <h4>Self-Attention Layer</h4>
+        <p>Each feature computes its relationship to all other features</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">3</div>
+      <div class="process-content">
+        <h4>Feed-Forward Processing</h4>
+        <p>Each feature's representation is refined based on what it learned</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">4</div>
+      <div class="process-content">
+        <h4>Repeat 6 Times</h4>
+        <p>Going through multiple layers lets the model learn increasingly complex relationships</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">5</div>
+      <div class="process-content">
+        <h4>CLS Token Aggregates</h4>
+        <p>A special token collects information from all features into a single summary</p>
+      </div>
     </div>
   </div>
 
-  <div class="concept-diagram reveal">
-    <div class="concept-step">
-      <div class="concept-num">→</div>
-      <div class="concept-text">It learns that certain combinations of clues matter more than others</div>
-    </div>
-    <div class="concept-step">
-      <div class="concept-num">→</div>
-      <div class="concept-text">It notices that some clues only matter in specific situations</div>
-    </div>
-    <div class="concept-step">
-      <div class="concept-num">→</div>
-      <div class="concept-text">It discovers subtle patterns that humans might miss</div>
+  <div class="explain-box reveal">
+    <div class="explain-box-title">Why Multiple Layers?</div>
+    <div class="explain-box-text">
+      One layer can learn simple relationships: "high momentum + low volatility" is good. Six layers deep, the model can learn complex combinations: "high momentum + low volatility + cheap valuation + strong profitability" might be even better, but only in certain market conditions.
     </div>
   </div>
 
-  <div class="story-box reveal">
-    <h3>Like an Experienced Detective</h3>
-    <p>
-      A novice detective might see each piece of evidence separately. An experienced detective knows how pieces fit together — a fingerprint near a window, muddy footprints, and a broken lock tell a story when combined. Our AI learns to see these combinations across hundreds of companies at once.
-    </p>
-  </div>
-
-  <p class="section-text reveal">
-    The key insight: <strong>relationships matter</strong>. A low price-to-earnings ratio might be good or bad depending on what else is happening with the company. The AI figures this out by studying thousands of examples.
-  </p>
+  <table class="comparison-table reveal">
+    <thead>
+      <tr>
+        <th>Aspect</th>
+        <th>Traditional Approach</th>
+        <th>SAINT Approach</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Feature relationships</td>
+        <td>Assumes independence or hand-crafted interactions</td>
+        <td>Learns interactions automatically from data</td>
+      </tr>
+      <tr>
+        <td>Context</td>
+        <td>Same feature always has same effect</td>
+        <td>Feature meaning changes based on context</td>
+      </tr>
+      <tr>
+        <td>Non-linearity</td>
+        <td>Limited or manually specified</td>
+        <td>Deep network captures complex patterns</td>
+      </tr>
+    </tbody>
+  </table>
 </section>
 
-<!-- ══ LEARNING FROM HISTORY ══════════════════════════════════════════════════════════════ -->
-<section class="section" id="learning">
+<!-- ══ TRAINING ══════════════════════════════════════════════════════════════════════════ -->
+<section class="section" id="training">
   <div class="section-num">04 / 05</div>
-  <h2 class="section-title reveal">Learning from Decades of Data</h2>
+  <h2 class="section-title reveal">How the Model Learns</h2>
 
   <p class="section-text reveal">
-    How does the AI learn these patterns? By studying history — lots of it. We give it data from <strong>over 20 years</strong> of stock market history and ask it to find what works.
+    SAINT uses <strong>self-supervised learning</strong> — a fancy way of saying it learns from the data itself, without explicit labels. It does this through two training tasks.
   </p>
 
-  <p class="section-text reveal">
-    The learning process happens in two stages:
-  </p>
-
-  <div class="metaphor-card reveal">
-    <div class="metaphor-icon">📚</div>
-    <div class="metaphor-title">Stage 1: Learning the Basics</div>
-    <div class="metaphor-text">
-      Imagine showing a student flashcards with some information hidden. They have to guess what's missing. By doing this thousands of times, they learn how different pieces of information relate to each other. Our AI does something similar — it learns the "language" of financial data.
+  <div class="concept-grid reveal">
+    <div class="concept-card">
+      <div class="concept-card-icon">🔒</div>
+      <div class="concept-card-title">Task 1: Masked Reconstruction</div>
+      <div class="concept-card-text">Hide some features and ask the model to guess them. This forces it to learn relationships — you can't guess a hidden value if you don't understand how it relates to the visible ones.</div>
     </div>
-  </div>
-
-  <div class="metaphor-card reveal">
-    <div class="metaphor-icon">🔮</div>
-    <div class="metaphor-title">Stage 2: Learning to Predict</div>
-    <div class="metaphor-text">
-      Once the AI understands financial patterns, we teach it to look at today's data and predict what happens next month. It practices on historical data where we already know the answer, learning from its mistakes.
+    <div class="concept-card">
+      <div class="concept-card-icon">⏭️</div>
+      <div class="concept-card-title">Task 2: Temporal Prediction</div>
+      <div class="concept-card-text">Show this month's data and ask the model to predict next month's features. This teaches it about dynamics — how indicators evolve over time.</div>
     </div>
   </div>
 
   <p class="section-text reveal">
-    This isn't "memorizing" past stock performance. The AI learns <strong>general principles</strong> that apply to new situations — just like a doctor learns medical principles that help treat new patients, not just memorize past cases.
+    Both tasks run for <strong>10 epochs</strong> each. An epoch means going through the entire dataset once, with the data shuffled randomly each time to help the model generalize.
   </p>
 
-  <div class="story-box reveal">
-    <h3>The Apprenticeship Model</h3>
-    <p>
-      Think of it like an apprenticeship. A junior chef watches experienced cooks, tries recipes, makes mistakes, and gradually learns what works. Our AI goes through a similar process — it "studies" historical data, makes predictions, gets feedback, and improves. After studying millions of examples, it becomes quite skilled.
-    </p>
+  <div class="diagram-container reveal">
+    <div class="diagram-title">Training Pipeline</div>
+    <div class="diagram-visual">
+      <div class="diagram-box input">Historical Data</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box process">Chunk (3 months)</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box process">Epoch (shuffle)</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box process">Batch (128)</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box output">Learn</div>
+    </div>
+  </div>
+
+  <div class="explain-box reveal">
+    <div class="explain-box-title">Why Self-Supervised?</div>
+    <div class="explain-box-text">
+      We don't need to manually label data as "this is a good stock" or "this is a bad stock." Instead, we create learning tasks from the data itself. By learning to reconstruct masked features and predict future values, the model builds rich representations that happen to be useful for predicting returns.
+    </div>
   </div>
 </section>
 
-<!-- ══ MAKING INVESTMENT DECISIONS ══════════════════════════════════════════════════════ -->
-<section class="section" id="decisions">
+<!-- ══ PREDICTION ════════════════════════════════════════════════════════════════════════ -->
+<section class="section" id="prediction">
   <div class="section-num">05 / 05</div>
-  <h2 class="section-title reveal">Turning Predictions Into Portfolios</h2>
+  <h2 class="section-title reveal">From Model to Portfolio</h2>
 
   <p class="section-text reveal">
-    Once the AI has learned to predict which stocks might do well, how do we actually use that to build an investment portfolio?
+    After training, we use the SAINT model to generate predictions. But we don't just take the raw model output — we combine it with other techniques in a <strong>two-stage approach</strong>.
   </p>
 
-  <div class="concept-diagram reveal">
-    <div class="concept-step">
-      <div class="concept-num">1</div>
-      <div class="concept-text"><strong>Predict:</strong> The AI estimates expected returns for thousands of companies</div>
+  <div class="process-flow reveal">
+    <div class="process-step">
+      <div class="process-num">1</div>
+      <div class="process-content">
+        <h4>Extract CLS Embeddings</h4>
+        <p>After SAINT processes all features, the CLS token contains a compressed representation of everything the model learned about that company at that time</p>
+      </div>
     </div>
-    <div class="concept-step">
-      <div class="concept-num">2</div>
-      <div class="concept-text"><strong>Select:</strong> We pick stocks with the highest predicted returns (for buying) and lowest (for shorting)</div>
+    <div class="process-step">
+      <div class="process-num">2</div>
+      <div class="process-content">
+        <h4>Dimensionality Reduction</h4>
+        <p>Use PCA to reduce 256 dimensions to 100, keeping the most important information</p>
+      </div>
     </div>
-    <div class="concept-step">
-      <div class="concept-num">3</div>
-      <div class="concept-text"><strong>Balance:</strong> We construct a portfolio with the right mix of positions</div>
+    <div class="process-step">
+      <div class="process-num">3</div>
+      <div class="process-content">
+        <h4>Random Forest Ensemble</h4>
+        <p>Train 200 decision trees on the embeddings to predict actual returns</p>
+      </div>
     </div>
-    <div class="concept-step">
-      <div class="concept-num">4</div>
-      <div class="concept-text"><strong>Manage Risk:</strong> We limit how much we invest in any single stock or sector</div>
+    <div class="process-step">
+      <div class="process-num">4</div>
+      <div class="process-content">
+        <h4>KNN Smoothing</h4>
+        <p>Apply k-nearest neighbors to smooth predictions, reducing noise</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">5</div>
+      <div class="process-content">
+        <h4>Build Portfolio</h4>
+        <p>Convert predictions to positions with risk controls (64+ positions, balanced long/short)</p>
+      </div>
     </div>
   </div>
 
-  <div class="story-box reveal">
-    <h3>The Result: A Diversified Portfolio</h3>
+  <div class="highlight-box reveal">
+    <h3>Why Two Stages?</h3>
     <p>
-      The final portfolio might have 60+ positions — some we're betting will go up (long positions) and some we're betting will go down (short positions). This diversification helps manage risk while seeking to capture the patterns the AI has discovered.
+      SAINT builds rich representations of companies through self-supervised learning. But for the final prediction, we use a Random Forest — it's robust, handles noise well, and provides natural uncertainty quantification. The KNN smoothing adds a final layer of stability. This combination performs better than using either approach alone.
     </p>
   </div>
 
-  <div class="pattern-grid reveal">
-    <div class="pattern-cell">AAPL</div>
-    <div class="pattern-cell">MSFT</div>
-    <div class="pattern-cell">GOOGL</div>
-    <div class="pattern-cell">AMZN</div>
-    <div class="pattern-cell">TSLA</div>
-    <div class="pattern-cell highlight">META</div>
-    <div class="pattern-cell">NVDA</div>
-    <div class="pattern-cell">JPM</div>
-    <div class="pattern-cell">BAC</div>
-    <div class="pattern-cell">WMT</div>
-    <div class="pattern-cell">PG</div>
-    <div class="pattern-cell">JNJ</div>
-  </div>
-
-  <p class="section-text reveal" style="text-align: center; font-style: italic; color: var(--muted); margin-top: 24px;">
-    And many more — all selected based on patterns learned from historical data
-  </p>
-
-  <div class="metaphor-card reveal">
-    <div class="metaphor-icon">⚖️</div>
-    <div class="metaphor-title">Balancing Risk and Return</div>
-    <div class="metaphor-text">
-      The AI helps us identify opportunities, but we still apply human judgment and risk controls. We don't let the AI take extreme positions — we balance its insights with prudent risk management.
+  <div class="explain-box reveal">
+    <div class="explain-box-title">Risk Management</div>
+    <div class="explain-box-text">
+      The model generates predictions, but we don't follow them blindly. We cap maximum position sizes, limit sector exposure, and maintain diversification. The AI is a tool that informs decisions — human judgment and risk controls remain essential.
     </div>
-  </div>
-
-  <div class="story-box reveal" style="background: linear-gradient(135deg, var(--terracotta) 0%, var(--gold) 100%);">
-    <h3>Important to Remember</h3>
-    <p>
-      No AI — no matter how sophisticated — can perfectly predict the future. Markets are unpredictable and influenced by countless factors. Our AI is a tool that helps us make more informed decisions, not a crystal ball. It's one part of a broader investment process that includes human oversight, risk management, and continuous improvement.
-    </p>
   </div>
 </section>
 
 <!-- ══ FOOTER ═══════════════════════════════════════════════════════════════════════════ -->
 <footer class="footer">
-  How AI Predicts Stock Returns · A Simple Guide<br>
-  <span style="opacity: 0.7; margin-top: 12px; display: block;">© Bayes Capital Management · For Educational Purposes</span>
+  Understanding SAINT — A Visual Guide<br>
+  <span style="opacity: 0.7; margin-top: 10px; display: block;">© Bayes Capital Management</span>
 </footer>
 
 <script>
-// Simple reveal on scroll
 const revealElements = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
